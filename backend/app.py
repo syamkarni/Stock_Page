@@ -1,6 +1,7 @@
 from flask import Flask,  jsonify
 import requests
 from bs4 import BeautifulSoup
+from flask_cors import CORS
 
 def scrape_data():
     url = 'https://www.moneycontrol.com/stocks/marketstats/nsemact1/index.php'
@@ -73,6 +74,7 @@ def get_individual_stock_data(number):
 
 
 app = Flask(__name__)
+CORS(app) 
 
 @app.route('/', methods=['GET'])
 def index():
@@ -85,4 +87,4 @@ def index1(number):
     return jsonify(data)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=3001, debug=True)
