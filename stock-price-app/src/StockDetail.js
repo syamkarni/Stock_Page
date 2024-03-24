@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import StockChart from './StockChart';
 
 const StockDetail = () => {
   const [stock, setStock] = useState({});
-  const [graphData, setGraphData] = useState(null);
   const { number } = useParams();
 
   useEffect(() => {
@@ -13,12 +11,6 @@ const StockDetail = () => {
       try {
         const response = await axios.get(`http://127.0.0.1:3001/stock/${number}`);
         setStock(response.data);
-        if (response.data.Graph_link) {
-            const graphResponse = await axios.get(response.data.Graph_link);
-            if (graphResponse.data && graphResponse.data.data) {
-              setGraphData(graphResponse.data.data.graphData);
-            }
-          }
       } catch (error) {
         console.error('Error fetching stock details: ', error);
       }
@@ -46,7 +38,7 @@ const StockDetail = () => {
             <p>UC LVWAPmVWAPt: {stock['UC LVWAPmVWAPt']}</p>
             <p>VWAP: {stock['VWAPVWAP']}</p>
             <p>Value (Lacs): {stock['Value (Lacs)']}</p>
-            {graphData && <StockChart graphData={graphData} />}
+
         </div>
   );
 };
