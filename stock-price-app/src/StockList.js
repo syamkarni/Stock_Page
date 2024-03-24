@@ -1,41 +1,53 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './StockList.css';
 
 const StockList = () => {
   const [stocks, setStocks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await axios.get('http://127.0.0.1:3001/');
-        setStocks(response.data.slice(0, 20));
+        setStocks(prevStocks => [...prevStocks, ...response.data.slice(prevStocks.length, prevStocks.length + 20)]);
+        setHasMore(response.data.length > stocks.length + 20);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching data: ', error);
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [stocks.length]);
 
   const handleStockClick = (number) => {
     navigate(`/stock/${number}`);
   };
-  const fetchMoreStocks = async () => {
-    try {
-      const response = await axios.get('http://127.0.0.1:3001/');
-      setStocks(response.data);
-    } catch (error) {
-      console.error('Error fetching more stocks: ', error);
+  
+  const handleScroll = useCallback(() => {
+    const isAtBottom = window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight;
+  
+    if (isAtBottom && !loading) {
+      setLoading(true);
     }
-  };
-  window.onscroll = async function () {
-    if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
-      await fetchMoreStocks();
-    }
-  };
+  }, [loading]);
+  
+  
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, {
+      passive: true
+    });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [handleScroll]);
 
   return (
     <div className="stock-list">
@@ -45,6 +57,8 @@ const StockList = () => {
           <div className="stock-value">{stock.value}</div>
         </div>
       ))}
+      {loading && <div>Loading more stocks...</div>}
+      {!hasMore && <div>That's all I have got for Today:)</div>}
     </div>
   );
 };
