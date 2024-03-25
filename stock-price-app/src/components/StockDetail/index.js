@@ -29,6 +29,7 @@ const StockDetail = ({ fetchStockDetails, stock, loading, error }) => {
           <p className={`stock-change ${getChangeClass(stock['NSE_Change'])}`}>
             {stock['NSE_Change']} ({stock['NSE_Change_Percentage']})
           </p>
+          <p><strong>Sector:</strong> {stock.Sector}</p>
           <div className="details-grid">
           <p>Value (Lacs): {stock['Value (Lacs)']}</p>
           <p>Open: {stock.Open}</p>

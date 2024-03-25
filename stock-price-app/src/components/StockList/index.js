@@ -52,15 +52,16 @@ const StockList = ({ stockList, setStocks }) => {
   return (
     <>
       <Header/>
+      <h1 className="stock-list-title">Most Active Stocks NSE</h1>
       <div className="stock-list">
         {stockList.slice(0, displayCount).map(stock => (
           <div key={stock.number} className="stock-container" onClick={() => handleStockClick(stock.number)}>
             <div className="stock-name">{stock.name}</div>
-            <div className="stock-value">{stock.value}</div>
+            <div className="stock-value">Current Value: {stock.value}</div>
           </div>
         ))}
         {loading && <div>Loading more stocks...</div>}
-        {displayCount >= stockList.length && <div>That's all I have got for Today:)</div>}
+        {!loading && displayCount >= stockList.length && <div>That's all I have got for Today:)</div>}
       </div>
     </>
   );
