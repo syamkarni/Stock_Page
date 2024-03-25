@@ -1,33 +1,59 @@
-import React, { useEffect, useRef } from 'react';
-import Chart from 'chart.js';
+import React, { useState, useEffect } from 'react';
+import Chart from 'react-apexcharts';
+import axios from 'axios';
 
-const StockChart = ({ graphData }) => {
-  const chartRef = useRef(null);
-
-  useEffect(() => {
-    const ctx = chartRef.current.getContext('2d');
-    const chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: graphData.map(data => new Date(data[0] * 1000).toLocaleDateString()),
-        datasets: [{
-          label: 'Stock Value',
-          data: graphData.map(data => data[1]),
-          borderColor: 'rgb(75, 192, 192)',
-          tension: 0.1
-        }]
-      },
-      options: {
-        scales: {
-          yAxes: [{ ticks: { beginAtZero: true } }],
-          xAxes: [{ type: 'time', time: { unit: 'day' } }]
+function Linechart({ graphLink }) {
+    const [graphData, setGraphData] = useState([]);
+    const [options, setOptions] = useState({
+        xaxis: {
+            categories: []
+        },
+        yaxis: {
+            title: { text: "Price" }
         }
-      }
     });
-    return () => chart.destroy();
-  }, [graphData]);
 
-  return <canvas ref={chartRef} />;
-};
+    useEffect(() => {
+        const fetchGraphData = async () => {
+            try {
+                const response = await axios.get(graphLink);
+                const { graphData, high, mean, low } = response.data.data;
+                
+                setGraphData(graphData);
 
-export default StockChart;
+                const categories = graphData.map(data => new Date(data[0] * 1000).toLocaleDateString());
+                setOptions(prevOptions => ({
+                    ...prevOptions,
+                    xaxis: {
+                        categories
+                    }
+                }));
+
+                console.log("High:", high);
+                console.log("Mean:", mean);
+                console.log("Low:", low);
+            } catch (error) {
+                console.error('Error fetching graph data: ', error);
+            }
+        };
+
+        fetchGraphData();
+    }, [graphLink]);
+
+    return (
+        <React.Fragment>
+            <div className='container-fluid mt-3 mb-3'>
+                <h2>Line Chart - Using Apexcharts in React</h2>
+                <Chart
+                    type='line'
+                    width={1490}
+                    height={550}
+                    series={[{ data: graphData }]}
+                    options={options}
+                />
+            </div>
+        </React.Fragment>
+    );
+}
+
+export default Linechart;

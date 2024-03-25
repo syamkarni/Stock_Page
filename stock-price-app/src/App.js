@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import StockList from './StockList';
 import StockDetail from './StockDetail';
+import Linechart from './StockChart';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Routes>
           <Route path="/" element={<StockList />} />
           <Route path="/stock/:number" element={<StockDetail />} />
+          <Route path="/stock-chart" element={<Linechart />} />
         </Routes>
       </div>
     </Router>
