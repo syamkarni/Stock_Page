@@ -54,7 +54,14 @@ pip install -r requirements.txt
 
 ### Assumptions and Notes
 
-- An assumption is made regarding the graph-related data fetched for the stocks. The data fetched might not always correspond to the day's graph due to the nature of the source website. Therefore, it is recommended to verify the relevance of the graph data for real-time application.
+#### Graph Data Assumption
+- The project retrieves stock price movement data for graphical representation. However, due to the nature of the data source (https://www.moneycontrol.com), there is an assumption that the graph data may not always reflect the current day's trends or movements accurately. This is important to consider, especially if the application is used for time-sensitive financial analysis or decision-making. Users are advised to verify the real-time relevance and accuracy of the graph data independently if using it for critical purposes.
+
+#### Data Source and Rights
+- All stock market data displayed in this application, including but not limited to stock names, values, and price movement graphs, are sourced from Moneycontrol (https://www.moneycontrol.com/stocks/marketstats/nsemact1/index.php). Moneycontrol owns all rights to this data. This project only uses the data for educational and demonstration purposes, and the backend script fetches this data in compliance with web scraping best practices and ethical guidelines. It's essential to respect and acknowledge the intellectual property rights of the data source. Users and developers replicating or modifying this project should also ensure they adhere to the terms and conditions of the source website and applicable legal standards regarding data use.
+
+#### No Financial Advice
+- It is important to note that this project is for informational and educational purposes only and should not be construed as financial advice. The accuracy, completeness, or reliability of the data is not guaranteed, and the application developers or maintainers bear no responsibility for any financial decisions or actions taken based on the information provided by this application.
 
 ### Running the Backend
 
