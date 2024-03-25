@@ -11,6 +11,7 @@ function Linechart({ graphLink }) {
         yaxis: {
             title: { text: "Price" }
         }
+        
     });
 
     useEffect(() => {
