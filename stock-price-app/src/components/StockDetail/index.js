@@ -21,9 +21,11 @@ const StockDetail = ({ fetchStockDetails, stock, loading, error }) => {
       <Header />
       <div className="main-container">
         <div className="stock-details">
-          <h2>{stock.Name}</h2>
-          <p>{stock.Sector}</p>
-          <p>Open: {stock.Open}</p>
+          <h2 className="stock-name">{stock.Name}</h2>
+          <p className="stock-last">{stock['NSE_Change']}({stock['NSE_Change_Percentage']})</p>
+          <div className="details-grid">
+            <p><span className="detail-title">Sector:</span> {stock.Sector}</p>
+            <p>Open: {stock.Open}</p>
           <p>Volume: {stock.Volume}</p>
           <p>52 Week High VWAP: {stock['52 Week HVWAPgh']}</p>
           <p>52 Week Low: {stock['52 Week Low']}</p>
@@ -37,12 +39,11 @@ const StockDetail = ({ fetchStockDetails, stock, loading, error }) => {
           <p>UC LVWAPmVWAPt: {stock['UC LVWAPmVWAPt']}</p>
           <p>VWAP: {stock['VWAPVWAP']}</p>
           <p>Value (Lacs): {stock['Value (Lacs)']}</p>
-          <p>Last : {stock['NSE_Change']}</p>
-          <p>LastPercent: {stock['NSE_Change_Percentage']}</p>
+          </div>
         </div>
         <div className="stock-chart">
-        <h2>Line Chart for {stock.Name}</h2>
-        <Linechart graphLink={stock.Graph_link} />
+          <h2>Line Chart for {stock.Name}</h2>
+          <Linechart graphLink={stock.Graph_link} />
         </div>
       </div>
     </>

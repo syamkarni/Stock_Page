@@ -18,3 +18,35 @@
     align-items: center;
     height: 100vh;
   }
+  .main-container {
+    padding: 20px;
+  }
+  
+  .stock-details {
+    margin-bottom: 20px;
+  }
+  
+  .stock-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .stock-last, .stock-last-percent {
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+  
+  .details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .detail-title {
+    font-weight: bold;
+  }
+  
+  .stock-chart {
+    margin-top: 20px;
+  }
