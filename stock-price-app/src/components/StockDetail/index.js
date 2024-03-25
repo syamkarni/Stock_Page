@@ -1,30 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { fetchStockDetails } from '../../actions/stockDetailsActions';
 import Linechart from '../StockChart';
 import Header from '../Header/index';
 
-const StockDetail = () => {
-  const [stock, setStock] = useState({});
+const StockDetail = ({ fetchStockDetails, stock, loading, error }) => {
   const { number } = useParams();
 
   useEffect(() => {
-    const fetchStock = async () => {
-      try {
-        const response = await axios.get(`http://127.0.0.1:3001/stock/${number}`);
-        setStock(response.data);
-      } catch (error) {
-        console.error('Error fetching stock details: ', error);
-      }
-    };
+    fetchStockDetails(number);
+  }, [number, fetchStockDetails]);
 
-    fetchStock();
-  }, [number]);
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <>
-    <Header/>
-    <div>
+      <Header />
+      <div>
       <h2>{stock.Name}</h2>
       <p>{stock.Sector}</p>
       <p>Open: {stock.Open}</p>
@@ -43,13 +37,20 @@ const StockDetail = () => {
       <p>Value (Lacs): {stock['Value (Lacs)']}</p>
       <p>Last : {stock['NSE_Change']}</p>
       <p>LastPercent: {stock['NSE_Change_Percentage']}</p>
-      
-      <h2>Line Chart for {stock.Name}</h2>
-      <Linechart graphLink={stock.Graph_link} />
-    </div>
+        <Linechart graphLink={stock.Graph_link} />
+      </div>
     </>
-    
   );
 };
 
-export default StockDetail;
+const mapStateToProps = (state) => ({
+  stock: state.stockDetails.stockDetail,
+  loading: state.stockDetails.loading,
+  error: state.stockDetails.error
+});
+
+const mapDispatchToProps = {
+  fetchStockDetails
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(StockDetail);

@@ -1,50 +1,49 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { setStocks } from '../../actions/stockActions';
 import './index.css';
 import Header from '../Header/index';
 
-const StockList = () => {
-  const [stocks, setStocks] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+const StockList = ({ stockList, setStocks }) => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [displayCount, setDisplayCount] = useState(20);
+
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
         const response = await axios.get('http://127.0.0.1:3001/');
-        setStocks(prevStocks => [...prevStocks, ...response.data.slice(prevStocks.length, prevStocks.length + 20)]);
-        setHasMore(response.data.length > stocks.length + 20);
-        setLoading(false);
+        setStocks(response.data);
       } catch (error) {
         console.error('Error fetching data: ', error);
-        setLoading(false);
       }
+      setLoading(false);
     };
 
     fetchData();
-  }, [stocks.length]);
+  }, [setStocks]);
 
   const handleStockClick = (number) => {
     navigate(`/stock/${number}`);
   };
-  
+
   const handleScroll = useCallback(() => {
     const isAtBottom = window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight;
-  
-    if (isAtBottom && !loading) {
+    if (isAtBottom && !loading && displayCount < stockList.length) {
       setLoading(true);
+      setTimeout(() => { 
+        setDisplayCount(prevCount => prevCount + 20);
+        setLoading(false);
+      }, 1000);
     }
-  }, [loading]);
-  
-  
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll, {
-      passive: true
-    });
+  }, [loading, displayCount, stockList.length]);
 
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -52,20 +51,27 @@ const StockList = () => {
 
   return (
     <>
-    <Header/>
-    <div className="stock-list">
-      {stocks.map(stock => (
-        <div key={stock.number} className="stock-container" onClick={() => handleStockClick(stock.number)}>
-          <div className="stock-name">{stock.name}</div>
-          <div className="stock-value">{stock.value}</div>
-        </div>
-      ))}
-      {loading && <div>Loading more stocks...</div>}
-      {!hasMore && <div>That's all I have got for Today:)</div>}
-    </div>
+      <Header/>
+      <div className="stock-list">
+        {stockList.slice(0, displayCount).map(stock => (
+          <div key={stock.number} className="stock-container" onClick={() => handleStockClick(stock.number)}>
+            <div className="stock-name">{stock.name}</div>
+            <div className="stock-value">{stock.value}</div>
+          </div>
+        ))}
+        {loading && <div>Loading more stocks...</div>}
+        {displayCount >= stockList.length && <div>That's all I have got for Today:)</div>}
+      </div>
     </>
-    
   );
 };
 
-export default StockList;
+const mapStateToProps = (state) => ({
+  stockList: state.stocks.stockList,
+});
+
+const mapDispatchToProps = {
+  setStocks,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(StockList);
