@@ -11,8 +11,8 @@ function Linechart({ graphLink }) {
         yaxis: {
             title: { text: "Price" }
         }
-        
     });
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         const fetchGraphData = async () => {
@@ -20,6 +20,10 @@ function Linechart({ graphLink }) {
                 const response = await axios.get(graphLink);
                 const { graphData, high, mean, low } = response.data.data;
                 
+                if (graphData.length === 0) {
+                    throw new Error('No graph data available');
+                }
+
                 setGraphData(graphData);
 
                 const categories = graphData.map(data => new Date(data[0] * 1000).toLocaleDateString());
@@ -35,24 +39,27 @@ function Linechart({ graphLink }) {
                 console.log("Low:", low);
             } catch (error) {
                 console.error('Error fetching graph data: ', error);
+                setError(true);
             }
         };
 
         fetchGraphData();
     }, [graphLink]);
 
+    if (error) {
+        return <div>No graph found</div>;
+    }
+
     return (
-        <React.Fragment>
-            <div className='container-fluid mt-3 mb-3'>
-                <Chart
-                    type='line'
-                    width={1490}
-                    height={550}
-                    series={[{ data: graphData }]}
-                    options={options}
-                />
-            </div>
-        </React.Fragment>
+        <div className='container-fluid mt-3 mb-3'>
+            <Chart
+                type='line'
+                width={1490}
+                height={550}
+                series={[{ data: graphData }]}
+                options={options}
+            />
+        </div>
     );
 }
 
