@@ -39,7 +39,7 @@ const StockDetail = () => {
       <p>VWAP: {stock['VWAPVWAP']}</p>
       <p>Value (Lacs): {stock['Value (Lacs)']}</p>
       
-      {/* Render Linechart component */}
+      <h2>Line Chart for {stock.Name}</h2>
       <Linechart graphLink={stock.Graph_link} />
     </div>
   );
