@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import Linechart from './StockChart';
+import Linechart from '../StockChart';
+import Header from '../Header/index';
 
 const StockDetail = () => {
   const [stock, setStock] = useState({});
@@ -21,6 +22,8 @@ const StockDetail = () => {
   }, [number]);
 
   return (
+    <>
+    <Header/>
     <div>
       <h2>{stock.Name}</h2>
       <p>{stock.Sector}</p>
@@ -38,10 +41,14 @@ const StockDetail = () => {
       <p>UC LVWAPmVWAPt: {stock['UC LVWAPmVWAPt']}</p>
       <p>VWAP: {stock['VWAPVWAP']}</p>
       <p>Value (Lacs): {stock['Value (Lacs)']}</p>
+      <p>Last : {stock['NSE_Change']}</p>
+      <p>LastPercent: {stock['NSE_Change_Percentage']}</p>
       
       <h2>Line Chart for {stock.Name}</h2>
       <Linechart graphLink={stock.Graph_link} />
     </div>
+    </>
+    
   );
 };
 

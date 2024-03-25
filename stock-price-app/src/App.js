@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import StockList from './StockList';
-import StockDetail from './StockDetail';
-import Linechart from './StockChart';
+import StockList from './components/StockList';
+import StockDetail from './components/StockDetail';
+import Linechart from './components/StockChart';
 
 function App() {
   return (

@@ -57,7 +57,16 @@ def get_individual_stock_data(number):
     stock_data['Name'] = name_sector_div.find('h1').get_text(strip=True)
     sector_strong = name_sector_div.find('strong')
     stock_data['Sector'] = sector_strong.get_text(strip=True)
-    stock_data['Graph_link']= indi_data_graph(number)
+    stock_data['Graph_link'] = indi_data_graph(number)
+
+    nse_change_div = soup.find('div', id='nsechange')
+    if nse_change_div:
+        change_text = nse_change_div.get_text(strip=True)
+        change_data = change_text.split()
+        if len(change_data) >= 2:
+            stock_data['NSE_Change'] = change_data[0]
+            stock_data['NSE_Change_Percentage'] = change_data[1].strip('()')
+
     oview_tables = soup.find_all('div', class_='oview_table')
     for table in oview_tables[:2]:
         table_rows = table.find_all('tr')

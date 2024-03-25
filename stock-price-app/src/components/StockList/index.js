@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './StockList.css';
+import './index.css';
+import Header from '../Header/index';
 
 const StockList = () => {
   const [stocks, setStocks] = useState([]);
@@ -50,6 +51,8 @@ const StockList = () => {
   }, [handleScroll]);
 
   return (
+    <>
+    <Header/>
     <div className="stock-list">
       {stocks.map(stock => (
         <div key={stock.number} className="stock-container" onClick={() => handleStockClick(stock.number)}>
@@ -60,6 +63,8 @@ const StockList = () => {
       {loading && <div>Loading more stocks...</div>}
       {!hasMore && <div>That's all I have got for Today:)</div>}
     </div>
+    </>
+    
   );
 };
 
