@@ -2,19 +2,19 @@
 
 ## Introduction
 
-This project is a stock market dashboard that displays live stock prices of 20 companies from NSE (National Stock Exchange of India). It features a simple React frontend and a Flask backend. The frontend utilizes Redux for state management and presents a detailed view of individual stock information along with price movement graphs.
+This project is a stock market dashboard that displays live stock prices of the most active companies from NSE (National Stock Exchange of India). It features a simple React frontend and a Flask backend. The frontend utilizes Redux for state management and presents a detailed view of individual stock information along with price movement graphs.
 
 ## Features
 
-- Display live stock prices of 20 NSE companies
+- Display live stock prices of 20 NSE companies initially.
 - Lazy loading of additional stock data on scroll
 - Detailed stock information page with price details
-- Graphical representation of stock price movements
+- Graphical representation of stock price movements of the day
 - Redux integration for state management
 
 ## Prerequisites
 
-Before you begin, ensure you have met the following requirements:
+Also make sure you have met the following requirements:
 
 - Python 3.x
 - Node.js and npm
@@ -73,8 +73,3 @@ Before you begin, ensure you have met the following requirements:
 - **react-apexcharts**: React component for ApexCharts, used for rendering stock price graphs.
 - **Beautiful Soup**: A library for parsing HTML and XML documents, used in the backend for web scraping.
 - **CORS (Cross-Origin Resource Sharing)**: A package for providing a Connect/Express middleware to enable CORS.
-
-## Contribution
-
-- Contributions to this project are welcome. Please create a pull request for review.
-
